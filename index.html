@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b6b68">
+<title>Scores IDE</title>
+<style>
+:root{--bg:#f3f7f6;--card:#fff;--ink:#18312f;--muted:#6b7c79;--main:#0b6b68;--soft:#e3f2f0;--line:#dce8e6}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{background:linear-gradient(145deg,#075e5b,#11918a);color:#fff;padding:20px 18px 22px;border-radius:0 0 24px 24px;box-shadow:0 4px 16px #075e5b33}
+.top{display:flex;align-items:center;justify-content:space-between}.brand{font-weight:850;font-size:23px}.badge{font-size:12px;background:#ffffff22;padding:7px 10px;border-radius:999px}
+.search{margin-top:16px;width:100%;border:0;border-radius:15px;padding:14px 15px;font-size:16px;outline:none;box-shadow:0 4px 15px #0002}
+main{max-width:720px;margin:auto;padding:16px 15px 35px}.hello{font-size:13px;color:var(--muted);margin:2px 2px 13px}
+.section{margin:20px 0 9px;font-weight:850;font-size:13px;text-transform:uppercase;color:var(--main);letter-spacing:.04em}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:11px}.card{position:relative;background:var(--card);border:1px solid var(--line);border-radius:17px;padding:15px;min-height:92px;text-align:left;box-shadow:0 3px 10px #18312f0d}
+.card .ico{font-size:25px}.card b{display:block;margin-top:7px;font-size:15px}.card small{color:var(--muted);line-height:1.25}
+.fav{position:absolute;right:8px;top:7px;border:0;background:transparent;font-size:20px}
+.back{border:0;background:var(--soft);color:var(--main);padding:10px 13px;border-radius:12px;font-weight:800}
+h2{margin:16px 0 4px}.subtitle{color:var(--muted);font-size:13px;margin-bottom:15px}
+.item{background:#fff;border:1px solid var(--line);border-radius:14px;padding:13px;margin:10px 0;box-shadow:0 2px 7px #18312f0a}.item label{display:block;font-weight:700;margin-bottom:8px}
+select,input[type=range]{width:100%;padding:11px;font-size:16px;border:1px solid var(--line);border-radius:10px;background:#fff}
+.score{background:var(--soft);color:var(--main);border-radius:16px;padding:17px;text-align:center;font-size:27px;font-weight:900;margin:13px 0}.note{font-size:13px;color:var(--muted);line-height:1.45}
+.notice{background:#fff7df;border-left:4px solid #d59a1c;border-radius:9px;padding:12px;font-size:13px;line-height:1.45}
+.empty{text-align:center;color:var(--muted);padding:30px}
+footer{text-align:center;color:#82908e;font-size:11px;padding:18px}
+@media(min-width:600px){.grid{grid-template-columns:repeat(3,1fr)}}
+</style>
+<link rel="manifest" href="manifest.webmanifest"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"></head>
+<body>
+<header><div class=top><div class=brand>🩺 Scores IDE</div><div class=badge>V4</div></div><input id=search class=search placeholder="🔎 Rechercher une échelle…" oninput="home(this.value)"></header>
+<main id=app></main><footer>Outil d’aide au rappel — aucune donnée patient enregistrée</footer>
+<script>
+const groups={
+"Douleur":{i:"🩹",items:[
+["EVA","Intensité 0–10","eva"],["EN","Échelle numérique","en"],["EVS","Échelle verbale","evs"],["ALGOPLUS","Douleur non communicant","algo"],["DOLOPLUS-2","Personne âgée","info"],["DN4","Douleur neuropathique","info"]]},
+"Neuro / conscience":{i:"🧠",items:[
+["GLASGOW","Conscience","gcs"],["RASS","Agitation / sédation","rass"],["NIHSS","AVC","info"],["CAM / CAM-ICU","Delirium","info"]]},
+"Urgence / aggravation":{i:"🚨",items:[
+["NEWS2","Aggravation clinique","info"],["SOFA","Défaillance d’organes","info"],["qSOFA","Repérage de gravité","info"]]},
+"Sevrage":{i:"🍷",items:[
+["CUSHMAN","Sevrage alcoolique","info"],["CIWA-Ar","Sevrage alcoolique","info"]]},
+"Risques":{i:"🛏️",items:[
+["BRADEN","Risque d’escarre","info"],["MORSE","Risque de chute","info"],["NORTON","Risque d’escarre","info"],["DOWNTON","Risque de chute","info"]]},
+"Nutrition / autonomie":{i:"🥗",items:[
+["MNA-SF","Risque de dénutrition","info"],["NRS-2002","Risque nutritionnel","info"],["MUST","Dénutrition","info"],["ADL / KATZ","Autonomie","info"],["IADL","Autonomie instrumentale","info"]]}
+};
+const app=document.getElementById("app"), all=()=>Object.values(groups).flatMap(g=>g.items);
+function favs(){try{return JSON.parse(localStorage.getItem("ide_fav")||"[]")}catch(e){return[]}}
+function toggle(n){let x=favs();x=x.includes(n)?x.filter(z=>z!==n):[...x,n];localStorage.setItem("ide_fav",JSON.stringify(x));home(document.getElementById("search")?.value||"")}
+function card(x,ico){let f=favs().includes(x[0]);return `<button class=card onclick="openS('${x[0]}')"><button class=fav onclick="event.stopPropagation();toggle('${x[0]}')">${f?"⭐":"☆"}</button><span class=ico>${ico}</span><b>${x[0]}</b><small>${x[1]}</small></button>`}
+function home(q=""){let n=q.toLowerCase();let fav=all().filter(x=>favs().includes(x[0])&&(!n||(x[0]+" "+x[1]).toLowerCase().includes(n)));
+let out=`<div class=hello>Retrouve rapidement tes échelles et scores 👇</div>`;
+if(fav.length)out+=`<div class=section>⭐ Mes favoris</div><div class=grid>${fav.map(x=>card(x,"⭐")).join("")}</div>`;
+for(const [name,g] of Object.entries(groups)){let arr=g.items.filter(x=>(x[0]+" "+x[1]).toLowerCase().includes(n));if(arr.length)out+=`<div class=section>${g.i} ${name}</div><div class=grid>${arr.map(x=>card(x,g.i)).join("")}</div>`}
+if(out===`<div class=hello>Retrouve rapidement tes échelles et scores 👇</div>`)out+=`<div class=empty>Aucune échelle trouvée.</div>`;
+out+=`<div class=section>⚠️ À retenir</div><div class=notice>Les seuils et conduites à tenir doivent correspondre aux versions validées et aux protocoles de ton établissement. Cet outil ne remplace pas le jugement clinique.</div>`;
+app.innerHTML=out}
+function page(n,sub,body){app.innerHTML=`<button class=back onclick=home()>← Retour</button><h2>${n}</h2><div class=subtitle>${sub}</div>${body}`}
+function openS(n){
+if(n==="EVA"||n==="EN"){page(n,"Auto-évaluation de l’intensité douloureuse",`<div class=item><label>Intensité : <span id=v>0</span>/10</label><input type=range min=0 max=10 value=0 oninput="v.textContent=this.value"></div><div class=score id=sv>0/10</div><div class=note>Le seuil de prise en charge et la conduite à tenir suivent le protocole de ton service.</div>`);return}
+if(n==="EVS"){page(n,"Échelle verbale simple",`<div class=item><label>Intensité</label><select onchange="ev.textContent=this.value"><option value="0/4">0 — absente</option><option value="1/4">1 — faible</option><option value="2/4">2 — modérée</option><option value="3/4">3 — intense</option><option value="4/4">4 — insupportable</option></select></div><div class=score id=ev>0/4</div>`);return}
+if(n==="ALGOPLUS"){let qs=["Expressions du visage","Regard","Plaintes","Attitudes corporelles","Comportement général"];page(n,"5 items cotés 0/1",qs.map(q=>`<div class=item><label>${q}</label><select class=algo><option value=0>Non — 0</option><option value=1>Oui — 1</option></select></div>`).join("")+`<div class=score id=as>ALGOPLUS : 0/5</div>`);document.querySelectorAll(".algo").forEach(e=>e.onchange=()=>as.textContent="ALGOPLUS : "+[...document.querySelectorAll(".algo")].reduce((a,x)=>a+ +x.value,0)+"/5");return}
+if(n==="GLASGOW"){page(n,"Ouverture des yeux + verbal + moteur",`<div class=item><label>Yeux</label><select class=g><option value=4>Spontanée — 4</option><option value=3>À la voix — 3</option><option value=2>À la douleur — 2</option><option value=1>Aucune — 1</option></select></div><div class=item><label>Verbal</label><select class=g><option value=5>Orientée — 5</option><option value=4>Confuse — 4</option><option value=3>Inappropriée — 3</option><option value=2>Incompréhensible — 2</option><option value=1>Aucune — 1</option></select></div><div class=item><label>Moteur</label><select class=g><option value=6>Obéit — 6</option><option value=5>Localise — 5</option><option value=4>Retrait — 4</option><option value=3>Flexion anormale — 3</option><option value=2>Extension — 2</option><option value=1>Aucune — 1</option></select></div><div class=score id=gs>GCS : 15/15</div>`);document.querySelectorAll(".g").forEach(e=>e.onchange=()=>gs.textContent="GCS : "+[...document.querySelectorAll(".g")].reduce((a,x)=>a+ +x.value,0)+"/15");return}
+if(n==="RASS"){page(n,"Agitation / sédation",`<div class=item><label>Score RASS</label><select><option>+4 — Combattif</option><option>+3 — Très agité</option><option>+2 — Agité</option><option>+1 — Inquiet / agité</option><option>0 — Éveillé et calme</option><option>-1 — Somnolent</option><option>-2 — Sédation légère</option><option>-3 — Sédation modérée</option><option>-4 — Sédation profonde</option><option>-5 — Non réveillable</option></select></div>`);return}
+if(n==="DOLOPLUS-2"||n==="DN4"){page(n,"Échelle clinique",`<div class=notice>Pour cette version, utilise la grille complète validée dans ton établissement afin d’éviter une cotation partielle ou différente de la version de référence.</div>`);return}
+page(n,groups[Object.keys(groups).find(k=>groups[k].items.some(x=>x[0]===n))]||"Échelle clinique",`<div class=notice>Cette échelle est référencée dans l’outil. Sa cotation complète doit être réalisée avec la version validée et le protocole de ton établissement. Je préfère ne pas simplifier une grille clinique au risque d’en modifier l’interprétation.</div>`);
+}
+home();
+</script><script>if("serviceWorker" in navigator){navigator.serviceWorker.register("./sw.js")}</script></body></html>
