@@ -3,68 +3,228 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0b6b68">
-<title>Scores IDE</title>
+<meta name="theme-color" content="#087c76">
+<meta name="description" content="Scores IDE V5 — outil mobile d'aide au calcul et au rappel des échelles cliniques.">
+<title>Scores IDE V5</title>
+<link rel="manifest" href="./manifest.webmanifest">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
 <style>
-:root{--bg:#f3f7f6;--card:#fff;--ink:#18312f;--muted:#6b7c79;--main:#0b6b68;--soft:#e3f2f0;--line:#dce8e6}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-header{background:linear-gradient(145deg,#075e5b,#11918a);color:#fff;padding:20px 18px 22px;border-radius:0 0 24px 24px;box-shadow:0 4px 16px #075e5b33}
-.top{display:flex;align-items:center;justify-content:space-between}.brand{font-weight:850;font-size:23px}.badge{font-size:12px;background:#ffffff22;padding:7px 10px;border-radius:999px}
-.search{margin-top:16px;width:100%;border:0;border-radius:15px;padding:14px 15px;font-size:16px;outline:none;box-shadow:0 4px 15px #0002}
-main{max-width:720px;margin:auto;padding:16px 15px 35px}.hello{font-size:13px;color:var(--muted);margin:2px 2px 13px}
-.section{margin:20px 0 9px;font-weight:850;font-size:13px;text-transform:uppercase;color:var(--main);letter-spacing:.04em}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:11px}.card{position:relative;background:var(--card);border:1px solid var(--line);border-radius:17px;padding:15px;min-height:92px;text-align:left;box-shadow:0 3px 10px #18312f0d}
-.card .ico{font-size:25px}.card b{display:block;margin-top:7px;font-size:15px}.card small{color:var(--muted);line-height:1.25}
-.fav{position:absolute;right:8px;top:7px;border:0;background:transparent;font-size:20px}
-.back{border:0;background:var(--soft);color:var(--main);padding:10px 13px;border-radius:12px;font-weight:800}
-h2{margin:16px 0 4px}.subtitle{color:var(--muted);font-size:13px;margin-bottom:15px}
-.item{background:#fff;border:1px solid var(--line);border-radius:14px;padding:13px;margin:10px 0;box-shadow:0 2px 7px #18312f0a}.item label{display:block;font-weight:700;margin-bottom:8px}
-select,input[type=range]{width:100%;padding:11px;font-size:16px;border:1px solid var(--line);border-radius:10px;background:#fff}
-.score{background:var(--soft);color:var(--main);border-radius:16px;padding:17px;text-align:center;font-size:27px;font-weight:900;margin:13px 0}.note{font-size:13px;color:var(--muted);line-height:1.45}
-.notice{background:#fff7df;border-left:4px solid #d59a1c;border-radius:9px;padding:12px;font-size:13px;line-height:1.45}
-.empty{text-align:center;color:var(--muted);padding:30px}
-footer{text-align:center;color:#82908e;font-size:11px;padding:18px}
-@media(min-width:600px){.grid{grid-template-columns:repeat(3,1fr)}}
+:root{
+ --bg:#f4f8f7;--card:#ffffff;--ink:#153431;--muted:#71817f;
+ --main:#087b75;--main2:#12a69a;--deep:#075d59;--soft:#e4f5f2;
+ --line:#dce9e6;--gold:#e5ad32;--danger:#b9362e;
+ --shadow:0 8px 28px rgba(20,70,65,.08);--shadow2:0 14px 35px rgba(20,70,65,.13)
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+ margin:0;background:
+ radial-gradient(circle at 10% 0%,rgba(18,166,154,.09),transparent 28%),
+ radial-gradient(circle at 100% 15%,rgba(7,93,89,.07),transparent 25%),
+ var(--bg);color:var(--ink);
+ font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+ -webkit-tap-highlight-color:transparent
+}
+body.dark{
+ --bg:#0e1716;--card:#172321;--ink:#eff8f6;--muted:#a7b8b5;
+ --soft:#183d39;--line:#294540;--shadow:0 8px 28px rgba(0,0,0,.18);--shadow2:0 14px 35px rgba(0,0,0,.28)
+}
+button,input,select{font:inherit}
+header{
+ background:linear-gradient(145deg,#075d59 0%,#087b75 48%,#13a69a 100%);
+ color:#fff;padding:17px 15px 21px;border-radius:0 0 30px 30px;
+ box-shadow:0 10px 30px rgba(7,93,89,.25);position:sticky;top:0;z-index:5
+}
+.top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.brand{font-weight:950;font-size:24px;letter-spacing:-.5px;display:flex;align-items:center;gap:7px}
+.badge{font-size:11px;background:#ffffff25;border:1px solid #ffffff20;padding:7px 10px;border-radius:999px;font-weight:800}
+.actions{display:flex;gap:7px;align-items:center}
+.iconbtn{border:1px solid #ffffff20;background:#ffffff1c;color:#fff;width:40px;height:40px;border-radius:13px;font-size:20px}
+.search{
+ margin-top:15px;width:100%;border:1px solid #ffffff25;border-radius:17px;padding:15px 16px;
+ font-size:16px;outline:none;box-shadow:0 8px 22px rgba(0,0,0,.15);background:#fff;color:#173532
+}
+.search::placeholder{color:#81918e}
+main{max-width:780px;margin:auto;padding:17px 14px 46px}
+.hello{font-size:14px;color:var(--muted);margin:1px 3px 14px;font-weight:600}
+.quick{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:18px}
+.quick button{
+ border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:16px;
+ padding:12px 7px;font-weight:850;box-shadow:var(--shadow);transition:.15s
+}
+.quick button:active{transform:scale(.97)}
+.section{
+ margin:22px 3px 10px;font-weight:950;font-size:13px;text-transform:uppercase;color:var(--main);
+ letter-spacing:.07em;display:flex;align-items:center;gap:6px
+}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.card{
+ position:relative;border:1px solid var(--line);background:var(--card);color:var(--ink);
+ border-radius:19px;padding:16px;min-height:112px;text-align:left;box-shadow:var(--shadow);
+ cursor:pointer;overflow:hidden;transition:transform .14s,box-shadow .14s,border-color .14s
+}
+.card:before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(#0b8179,#16aa9e);opacity:.8}
+.card:active{transform:scale(.985);box-shadow:var(--shadow2)}
+.card .ico{font-size:26px;display:block}
+.card b{display:block;margin-top:8px;font-size:15px;letter-spacing:-.1px}
+.card small{display:block;color:var(--muted);line-height:1.3;margin-top:4px;font-size:12px}
+.fav{position:absolute;right:8px;top:7px;border:0;background:transparent;color:var(--gold);font-size:21px;padding:4px}
+.panel{
+ background:var(--card);border:1px solid var(--line);border-radius:19px;padding:15px;
+ box-shadow:var(--shadow);margin:12px 0
+}
+.back{
+ border:1px solid var(--line);background:var(--soft);color:var(--main);
+ padding:10px 14px;border-radius:13px;font-weight:900;box-shadow:0 2px 7px rgba(0,0,0,.03)
+}
+h2{margin:16px 0 4px;font-size:25px;letter-spacing:-.5px}
+.subtitle{color:var(--muted);font-size:13px;margin-bottom:14px}
+.item{
+ background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin:10px 0;
+ box-shadow:0 3px 10px rgba(20,70,65,.035)
+}
+.item label{display:block;font-weight:850;margin-bottom:9px}
+select,input[type=number],input[type=range]{
+ width:100%;padding:12px;font-size:16px;border:1px solid var(--line);border-radius:11px;
+ background:var(--card);color:var(--ink)
+}
+input[type=range]{accent-color:var(--main);padding:8px 0;border:0}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.score{
+ background:linear-gradient(135deg,var(--soft),#f0fbf9);color:var(--main);
+ border:1px solid #cfe9e5;border-radius:18px;padding:17px;text-align:center;font-size:28px;
+ font-weight:950;margin:14px 0
+}
+body.dark .score{background:var(--soft);border-color:var(--line)}
+.status{font-weight:900;text-align:center;padding:11px 12px;border-radius:13px;margin:9px 0}
+.ok{background:#e5f6eb;color:#216b3d}.attention{background:var(--warn,#fff5d9);color:#775700}.urgent{background:#fff0ef;color:#a52d24}
+body.dark .ok{background:#183a29;color:#a9e3bc}
+body.dark .attention{background:#3a321b;color:#f2d57b}
+body.dark .urgent{background:#402421;color:#ffaaa2}
+.note{font-size:13px;color:var(--muted);line-height:1.55}
+.notice{background:var(--warn,#fff5d9);border-left:4px solid #d49b1d;border-radius:11px;padding:13px;font-size:13px;line-height:1.55}
+.empty{text-align:center;color:var(--muted);padding:36px 20px;background:var(--card);border:1px dashed var(--line);border-radius:18px}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{border:1px solid var(--line);background:var(--soft);color:var(--main);border-radius:999px;padding:7px 10px;font-size:12px;font-weight:850}
+.footer{text-align:center;color:#81908d;font-size:11px;padding:18px 15px 26px;line-height:1.5}
+@media(min-width:600px){
+ .grid{grid-template-columns:repeat(3,1fr)}
+ .quick{grid-template-columns:repeat(6,1fr)}
+}
+@media(max-width:360px){
+ .grid{grid-template-columns:1fr}
+ .quick{grid-template-columns:repeat(2,1fr)}
+ .brand{font-size:21px}
+}
 </style>
-<link rel="manifest" href="manifest.webmanifest"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"></head>
+</head>
 <body>
-<header><div class=top><div class=brand>🩺 Scores IDE</div><div class=badge>V4</div></div><input id=search class=search placeholder="🔎 Rechercher une échelle…" oninput="home(this.value)"></header>
-<main id=app></main><footer>Outil d’aide au rappel — aucune donnée patient enregistrée</footer>
+<header>
+  <div class="top">
+    <div class="brand">🩺 Scores IDE</div>
+    <div class="actions"><button class="iconbtn" id="dark" title="Mode sombre">☾</button><div class="badge">V5</div></div>
+  </div>
+  <input id="search" class="search" placeholder="🔎 Rechercher une échelle, un score…" autocomplete="off">
+</header>
+<main id="app"></main>
+<div class="footer">Outil d'aide au rappel • aucune donnée patient enregistrée • vérifier les protocoles locaux</div>
+
 <script>
 const groups={
-"Douleur":{i:"🩹",items:[
-["EVA","Intensité 0–10","eva"],["EN","Échelle numérique","en"],["EVS","Échelle verbale","evs"],["ALGOPLUS","Douleur non communicant","algo"],["DOLOPLUS-2","Personne âgée","info"],["DN4","Douleur neuropathique","info"]]},
-"Neuro / conscience":{i:"🧠",items:[
-["GLASGOW","Conscience","gcs"],["RASS","Agitation / sédation","rass"],["NIHSS","AVC","info"],["CAM / CAM-ICU","Delirium","info"]]},
-"Urgence / aggravation":{i:"🚨",items:[
-["NEWS2","Aggravation clinique","info"],["SOFA","Défaillance d’organes","info"],["qSOFA","Repérage de gravité","info"]]},
-"Sevrage":{i:"🍷",items:[
-["CUSHMAN","Sevrage alcoolique","info"],["CIWA-Ar","Sevrage alcoolique","info"]]},
-"Risques":{i:"🛏️",items:[
-["BRADEN","Risque d’escarre","info"],["MORSE","Risque de chute","info"],["NORTON","Risque d’escarre","info"],["DOWNTON","Risque de chute","info"]]},
-"Nutrition / autonomie":{i:"🥗",items:[
-["MNA-SF","Risque de dénutrition","info"],["NRS-2002","Risque nutritionnel","info"],["MUST","Dénutrition","info"],["ADL / KATZ","Autonomie","info"],["IADL","Autonomie instrumentale","info"]]}
+ "Douleur":{i:"🩹",items:[
+  ["EVA","Intensité 0–10","eva","calc"],["EN","Échelle numérique 0–10","en","calc"],["EVS","Échelle verbale 0–4","evs","calc"],
+  ["ALGOPLUS","Douleur aiguë chez la personne âgée non communicante","algo","calc"],["DOLOPLUS-2","Douleur chronique / troubles de communication","info","info"],
+  ["DN4","Douleur neuropathique","info","info"],["DAN","Douleur aiguë du nouveau-né","info","info"],["EVENDOL","Douleur de l'enfant","info","info"],["FPS-R","Échelle de visages","info","info"]]},
+ "Neuro / conscience":{i:"🧠",items:[
+  ["GLASGOW","Conscience — E/V/M","gcs","calc"],["GCS-P","GCS + réactivité pupillaire","gcsp","calc"],["RASS","Agitation / sédation","rass","calc"],
+  ["NIHSS","Déficit neurologique / AVC","info","info"],["CAM / CAM-ICU","Dépistage du delirium","info","info"]]},
+ "Aggravation clinique":{i:"🚨",items:[
+  ["NEWS2","Surveillance de l'aggravation chez l'adulte","news2","calc"],["qSOFA","3 critères de gravité — ne remplace pas l'évaluation clinique","qsofa","calc"],
+  ["SOFA","Défaillance d'organes","info","info"]]},
+ "Risques":{i:"🛏️",items:[
+  ["MORSE","Risque de chute","morse","calc"],["BRADEN","Risque d'escarre","info","info"],["NORTON","Risque d'escarre","info","info"],["DOWNTON","Risque de chute","info","info"]]},
+ "Nutrition / autonomie":{i:"🥗",items:[
+  ["MNA-SF","Risque de dénutrition","info","info"],["NRS-2002","Risque nutritionnel","info","info"],["MUST","Dénutrition","info","info"],["ADL / KATZ","Autonomie","info","info"],["IADL","Autonomie instrumentale","info","info"]]},
+ "Sevrage":{i:"🧪",items:[
+  ["CUSHMAN","Sevrage alcoolique","info","info"],["CIWA-Ar","Sevrage alcoolique","info","info"]]}
 };
-const app=document.getElementById("app"), all=()=>Object.values(groups).flatMap(g=>g.items);
+const all=()=>Object.values(groups).flatMap(g=>g.items);
+const app=document.getElementById("app");
 function favs(){try{return JSON.parse(localStorage.getItem("ide_fav")||"[]")}catch(e){return[]}}
-function toggle(n){let x=favs();x=x.includes(n)?x.filter(z=>z!==n):[...x,n];localStorage.setItem("ide_fav",JSON.stringify(x));home(document.getElementById("search")?.value||"")}
-function card(x,ico){let f=favs().includes(x[0]);return `<button class=card onclick="openS('${x[0]}')"><button class=fav onclick="event.stopPropagation();toggle('${x[0]}')">${f?"⭐":"☆"}</button><span class=ico>${ico}</span><b>${x[0]}</b><small>${x[1]}</small></button>`}
-function home(q=""){let n=q.toLowerCase();let fav=all().filter(x=>favs().includes(x[0])&&(!n||(x[0]+" "+x[1]).toLowerCase().includes(n)));
-let out=`<div class=hello>Retrouve rapidement tes échelles et scores 👇</div>`;
-if(fav.length)out+=`<div class=section>⭐ Mes favoris</div><div class=grid>${fav.map(x=>card(x,"⭐")).join("")}</div>`;
-for(const [name,g] of Object.entries(groups)){let arr=g.items.filter(x=>(x[0]+" "+x[1]).toLowerCase().includes(n));if(arr.length)out+=`<div class=section>${g.i} ${name}</div><div class=grid>${arr.map(x=>card(x,g.i)).join("")}</div>`}
-if(out===`<div class=hello>Retrouve rapidement tes échelles et scores 👇</div>`)out+=`<div class=empty>Aucune échelle trouvée.</div>`;
-out+=`<div class=section>⚠️ À retenir</div><div class=notice>Les seuils et conduites à tenir doivent correspondre aux versions validées et aux protocoles de ton établissement. Cet outil ne remplace pas le jugement clinique.</div>`;
+function toggle(n){let x=favs();x=x.includes(n)?x.filter(z=>z!==n):[...x,n];localStorage.setItem("ide_fav",JSON.stringify(x));home(search.value)}
+function card(x,ico){const f=favs().includes(x[0]);return `<div class="card" onclick="openS('${x[2]}','${x[0]}')"><button class="fav" aria-label="Favori" onclick="event.stopPropagation();toggle('${x[0]}')">${f?"★":"☆"}</button><span class="ico">${ico}</span><b>${x[0]}</b><small>${x[1]}</small></div>`}
+function home(q=""){let n=(q||"").toLowerCase();let out=`<div class="hello">Ton aide-mémoire clinique, clair et rapide à utiliser 👇</div>
+<div class="quick"><button onclick="openS('news2','NEWS2')">🚨 NEWS2</button><button onclick="openS('gcs','GLASGOW')">🧠 Glasgow</button><button onclick="openS('morse','MORSE')">🚶 Morse</button><button onclick="openS('eva','EVA')">🩹 Douleur</button><button onclick="openS('rass','RASS')">😴 RASS</button><button onclick="showAbout()">ℹ️ À propos</button></div>`;
+let fav=all().filter(x=>favs().includes(x[0])&&(!n||(x[0]+" "+x[1]).toLowerCase().includes(n)));
+if(fav.length)out+=`<div class="section">⭐ Mes favoris</div><div class="grid">${fav.map(x=>card(x,"⭐")).join("")}</div>`;
+for(const [name,g] of Object.entries(groups)){let arr=g.items.filter(x=>(x[0]+" "+x[1]).toLowerCase().includes(n));if(arr.length)out+=`<div class="section">${g.i} ${name}</div><div class="grid">${arr.map(x=>card(x,g.i)).join("")}</div>`}
+if(!fav.length && !all().some(x=>(x[0]+" "+x[1]).toLowerCase().includes(n)) && n)out+=`<div class="empty">Aucune échelle trouvée.<br><br>Essaie « douleur », « chute », « Glasgow » ou « dénutrition ».</div>`;
+out+=`<div class="section">⚠️ À garder en tête</div><div class="notice">Un score est une aide à l'évaluation, pas un diagnostic. Les seuils d'alerte, conduites à tenir et versions utilisées doivent correspondre aux recommandations et protocoles de ton établissement.</div>`;
 app.innerHTML=out}
-function page(n,sub,body){app.innerHTML=`<button class=back onclick=home()>← Retour</button><h2>${n}</h2><div class=subtitle>${sub}</div>${body}`}
-function openS(n){
-if(n==="EVA"||n==="EN"){page(n,"Auto-évaluation de l’intensité douloureuse",`<div class=item><label>Intensité : <span id=v>0</span>/10</label><input type=range min=0 max=10 value=0 oninput="v.textContent=this.value"></div><div class=score id=sv>0/10</div><div class=note>Le seuil de prise en charge et la conduite à tenir suivent le protocole de ton service.</div>`);return}
-if(n==="EVS"){page(n,"Échelle verbale simple",`<div class=item><label>Intensité</label><select onchange="ev.textContent=this.value"><option value="0/4">0 — absente</option><option value="1/4">1 — faible</option><option value="2/4">2 — modérée</option><option value="3/4">3 — intense</option><option value="4/4">4 — insupportable</option></select></div><div class=score id=ev>0/4</div>`);return}
-if(n==="ALGOPLUS"){let qs=["Expressions du visage","Regard","Plaintes","Attitudes corporelles","Comportement général"];page(n,"5 items cotés 0/1",qs.map(q=>`<div class=item><label>${q}</label><select class=algo><option value=0>Non — 0</option><option value=1>Oui — 1</option></select></div>`).join("")+`<div class=score id=as>ALGOPLUS : 0/5</div>`);document.querySelectorAll(".algo").forEach(e=>e.onchange=()=>as.textContent="ALGOPLUS : "+[...document.querySelectorAll(".algo")].reduce((a,x)=>a+ +x.value,0)+"/5");return}
-if(n==="GLASGOW"){page(n,"Ouverture des yeux + verbal + moteur",`<div class=item><label>Yeux</label><select class=g><option value=4>Spontanée — 4</option><option value=3>À la voix — 3</option><option value=2>À la douleur — 2</option><option value=1>Aucune — 1</option></select></div><div class=item><label>Verbal</label><select class=g><option value=5>Orientée — 5</option><option value=4>Confuse — 4</option><option value=3>Inappropriée — 3</option><option value=2>Incompréhensible — 2</option><option value=1>Aucune — 1</option></select></div><div class=item><label>Moteur</label><select class=g><option value=6>Obéit — 6</option><option value=5>Localise — 5</option><option value=4>Retrait — 4</option><option value=3>Flexion anormale — 3</option><option value=2>Extension — 2</option><option value=1>Aucune — 1</option></select></div><div class=score id=gs>GCS : 15/15</div>`);document.querySelectorAll(".g").forEach(e=>e.onchange=()=>gs.textContent="GCS : "+[...document.querySelectorAll(".g")].reduce((a,x)=>a+ +x.value,0)+"/15");return}
-if(n==="RASS"){page(n,"Agitation / sédation",`<div class=item><label>Score RASS</label><select><option>+4 — Combattif</option><option>+3 — Très agité</option><option>+2 — Agité</option><option>+1 — Inquiet / agité</option><option>0 — Éveillé et calme</option><option>-1 — Somnolent</option><option>-2 — Sédation légère</option><option>-3 — Sédation modérée</option><option>-4 — Sédation profonde</option><option>-5 — Non réveillable</option></select></div>`);return}
-if(n==="DOLOPLUS-2"||n==="DN4"){page(n,"Échelle clinique",`<div class=notice>Pour cette version, utilise la grille complète validée dans ton établissement afin d’éviter une cotation partielle ou différente de la version de référence.</div>`);return}
-page(n,groups[Object.keys(groups).find(k=>groups[k].items.some(x=>x[0]===n))]||"Échelle clinique",`<div class=notice>Cette échelle est référencée dans l’outil. Sa cotation complète doit être réalisée avec la version validée et le protocole de ton établissement. Je préfère ne pas simplifier une grille clinique au risque d’en modifier l’interprétation.</div>`);
+function page(n,sub,body){app.innerHTML=`<button class="back" onclick="home(search.value)">← Retour</button><h2>${n}</h2><div class="subtitle">${sub}</div>${body}`}
+function scoreBadge(text,kind="ok"){return `<div class="status ${kind}" id="status">${text}</div>`}
+function openS(type,n){
+ if(type==="eva"||type==="en"){page(n,"Auto-évaluation de l'intensité douloureuse",`<div class="item"><label>Intensité : <span id="v">0</span>/10</label><input id="r" type="range" min="0" max="10" value="0" oninput="v.textContent=this.value; updPain(+this.value)"></div><div class="score" id="sv">0/10</div><div id="status" class="status ok">0 — pas de douleur</div><div class="note">Pour l'adulte, la HAS décrit l'EVA et l'EN sur 0–10 (ou 0–100). Dans le document HAS consulté, le seuil de prise en charge indiqué est ≥4/10. Le seuil et la conduite à tenir restent à confronter au protocole local.</div><div class="panel"><b>Repères</b><div class="chips"><span class="chip">0 : aucune</span><span class="chip">1–3 : faible</span><span class="chip">4–6 : modérée</span><span class="chip">7–10 : intense</span></div></div>`);return}
+ if(type==="evs"){page(n,"Échelle verbale simple",`<div class="item"><label>Intensité</label><select id="sel" onchange="updEVS(+this.value)"><option value="0">0 — absente</option><option value="1">1 — faible</option><option value="2">2 — modérée</option><option value="3">3 — intense</option><option value="4">4 — extrêmement intense</option></select></div><div class="score" id="sv">0/4</div><div id="status" class="status ok">Pas de douleur</div><div class="note">La HAS décrit l'EVS de 0 à 4 et indique un seuil de prise en charge ≥2/4 dans le document de référence.</div>`);return}
+ if(type==="algo"){let qs=["Visage","Regard","Plaintes","Corps","Comportement général"];page(n,"Hétéro-évaluation : 5 domaines cotés 0/1",qs.map((q,i)=>`<div class="item"><label>${q}</label><select class="algo"><option value="0">Non — 0</option><option value="1">Oui — 1</option></select></div>`).join("")+`<div class="score" id="as">ALGOPLUS : 0/5</div><div class="note">La HAS décrit ALGOPLUS comme une échelle comportementale de douleur aiguë chez la personne âgée ayant des troubles de communication. Utiliser la grille validée de ton établissement pour la cotation détaillée.</div>`);document.querySelectorAll(".algo").forEach(e=>e.onchange=()=>as.textContent="ALGOPLUS : "+[...document.querySelectorAll(".algo")].reduce((a,x)=>a+ +x.value,0)+"/5");return}
+ if(type==="gcs"||type==="gcsp"){let extra=type==="gcsp"?`<div class="item"><label>Réactivité pupillaire</label><select id="pupil" onchange="updGCS()"><option value="0">Deux pupilles réactives — PRS 0</option><option value="1">Une pupille non réactive — PRS 1</option><option value="2">Deux pupilles non réactives — PRS 2</option></select></div>`:"";page(n,"Approche structurée : Yeux + Verbal + Moteur",`<div class="item"><label>Yeux</label><select class="g"><option value="4">Spontanée — 4</option><option value="3">Au son — 3</option><option value="2">À la pression — 2</option><option value="1">Aucune — 1</option></select></div><div class="item"><label>Verbal</label><select class="g"><option value="5">Orientée — 5</option><option value="4">Confuse — 4</option><option value="3">Mots — 3</option><option value="2">Sons — 2</option><option value="1">Aucune — 1</option></select></div><div class="item"><label>Moteur</label><select class="g"><option value="6">Obéit aux ordres — 6</option><option value="5">Localise — 5</option><option value="4">Flexion normale — 4</option><option value="3">Flexion anormale — 3</option><option value="2">Extension — 2</option><option value="1">Aucune — 1</option></select></div>${extra}<div class="score" id="gs">GCS : 15/15</div>${type==="gcsp"?`<div class="score" id="gsp">GCS-P : 15</div>`:""}<div class="note">La méthode moderne recommande de rapporter les trois composantes (E/V/M), pas seulement le total. Le GCS-P = GCS − score pupillaire. Il ne remplace pas la description clinique complète.</div>`);document.querySelectorAll(".g").forEach(e=>e.onchange=updGCS);return}
+ if(type==="rass"){page(n,"Agitation / sédation",`<div class="item"><label>Niveau RASS</label><select id="rassSel" onchange="updRASS()">
+<option value="4">+4 — Combattif</option><option value="3">+3 — Très agité</option><option value="2">+2 — Agité</option><option value="1">+1 — Inquiet / agité</option><option value="0">0 — Éveillé et calme</option><option value="-1">−1 — Somnolent</option><option value="-2">−2 — Sédation légère</option><option value="-3">−3 — Sédation modérée</option><option value="-4">−4 — Sédation profonde</option><option value="-5">−5 — Non réveillable</option></select></div><div class="score" id="rs">RASS 0</div><div class="note">La procédure RASS publiée par le NHS décrit d'abord l'observation, puis la réponse à la voix, puis à une stimulation physique si nécessaire. Pour la prise en charge, suivre le protocole du service.</div>`);return}
+ if(type==="news2"){page(n,"National Early Warning Score 2 — adulte",`<div class="notice">Version standard NEWS2. La « SpO₂ scale 2 » ne doit être utilisée que lorsqu'elle est appropriée (notamment cible 88–92 % en insuffisance respiratoire hypercapnique confirmée, selon le référentiel NEWS2). Vérifie toujours la version adoptée par ton établissement.</div>
+${num("FR","Respirations/min","rr",0,80,1,16)}${num("SpO₂","Saturation %","spo2",50,100,1,97)}${selectItem("Air / O₂","oxygen",[["air","Air ambiant"],["o2","Oxygène supplémentaire"]])}${num("PAS","mmHg","sbp",50,260,1,120)}${num("Pouls","bpm","hr",20,180,1,75)}${selectItem("Conscience","conc",[["A","A — alerte"],["C","C — confusion nouvelle"],["V","V — réponse à la voix"],["P","P — réponse à la pression"],["U","U — aucune réponse"]])}${num("Température","°C","temp",30,42,0.1,36.5)}${selectItem("SpO₂ scale","scale",[["1","Scale 1 — standard"],["2","Scale 2 — cible 88–92 % appropriée"]])}<button class="back" onclick="calcNEWS()" style="width:100%;margin-top:8px">Calculer le NEWS2</button><div class="score" id="newsScore">NEWS2 : —</div><div id="newsStatus"></div><div class="note">Le NEWS2 additionne les points de fréquence respiratoire, SpO₂, oxygène supplémentaire, PAS, pouls, conscience/confusion et température.</div>`);return}
+ if(type==="qsofa"){page(n,"Quick SOFA — 3 critères",`${selectItem("FR ≥22/min ?","qrr",[["0","Non — 0"],["1","Oui — 1"]])}${selectItem("PAS ≤100 mmHg ?","qbp",[["0","Non — 0"],["1","Oui — 1"]])}${selectItem("Altération de la conscience ?","qms",[["0","Non — 0"],["1","Oui — 1"]])}<button class="back" onclick="calcQSOFA()" style="width:100%;margin-top:8px">Calculer</button><div class="score" id="qScore">qSOFA : —/3</div><div class="note">Le qSOFA est un outil de repérage et ne doit pas être utilisé seul pour diagnostiquer ou exclure un sepsis.</div>`);return}
+ if(type==="morse"){const items=[
+["Antécédent de chute récent","fall",[["0","Non — 0"],["25","Oui — 25"]]],
+["Diagnostic secondaire","diag",[["0","Non — 0"],["15","Oui — 15"]]],
+["Aide à la marche","aid",[["0","Aucune / repos / aide infirmière / fauteuil — 0"],["15","Canne / béquilles / déambulateur — 15"],["30","Se tient aux meubles — 30"]]],
+["Perfusion / voie IV","iv",[["0","Non — 0"],["20","Oui — 20"]]],
+["Marche / transfert","gait",[["0","Normale / repos / immobile — 0"],["10","Faible — 10"],["20","Altérée — 20"]]],
+["État mental","mental",[["0","Connaît ses capacités — 0"],["15","Surestime / oublie ses limites — 15"]]]];
+page(n,"6 facteurs — total 0 à 125",items.map(x=>selectItem(x[0],x[1],x[2])).join("")+`<button class="back" onclick="calcMorse()" style="width:100%;margin-top:8px">Calculer le score</button><div class="score" id="mScore">Morse : —/125</div><div class="note">Les seuils de risque et les mesures préventives peuvent varier selon les protocoles locaux : interprète le score avec l'évaluation clinique et le référentiel de ton établissement.</div>`);return}
+ openInfo(n);
 }
+function num(label,unit,id,min,max,step,val){return `<div class="item"><label>${label} <span style="color:var(--muted);font-weight:600">(${unit})</span></label><input id="${id}" type="number" min="${min}" max="${max}" step="${step}" value="${val}"></div>`}
+function selectItem(label,id,opts){return `<div class="item"><label>${label}</label><select id="${id}">${opts.map(o=>`<option value="${o[0]}">${o[1]}</option>`).join("")}</select></div>`}
+function updPain(v){sv.textContent=v+"/10";status.className="status "+(v>=4?"attention":"ok");status.textContent=v===0?"0 — pas de douleur":v<4?"Douleur faible":"Seuil HAS ≥4/10 : à confronter au protocole local"}
+function updEVS(v){sv.textContent=v+"/4";status.className="status "+(v>=2?"attention":"ok");status.textContent=v===0?"Pas de douleur":v<2?"Douleur faible":"Seuil HAS ≥2/4 : à confronter au protocole local"}
+function updGCS(){let s=[...document.querySelectorAll(".g")].reduce((a,x)=>a+ +x.value,0);gs.textContent="GCS : "+s+"/15";if(document.getElementById("gsp")){let prs=+pupil.value;gsp.textContent="GCS-P : "+(s-prs)}}
+function updRASS(){rs.textContent="RASS "+rassSel.value}
+function val(id){return +document.getElementById(id).value}
+function newsRR(x){return x<=8?3:x<=11?1:x<=20?0:x<=24?2:3}
+function newsSp(x,scale,oxy){if(scale==="1")return x<=91?3:x<=93?2:x<=95?1:0; if(oxy==="air")return x<=83?3:x<=85?2:x<=87?1:0; return x<=83?3:x<=85?2:x<=87?1:x<=92?0:x<=94?1:x<=96?2:3}
+function newsSBP(x){return x<=90?3:x<=100?2:x<=110?1:x<=219?0:3}
+function newsHR(x){return x<=40?3:x<=50?1:x<=90?0:x<=110?1:x<=130?2:3}
+function newsTemp(x){return x<=35?3:x<=36?1:x<=38?0:x<=39?1:2}
+function calcNEWS(){let rr=val("rr"),spo=val("spo2"),oxy=document.getElementById("oxygen").value,scl=document.getElementById("scale").value,conc=document.getElementById("conc").value;let s=newsRR(rr)+newsSp(spo,scl,oxy)+(oxy==="o2"?2:0)+newsSBP(val("sbp"))+newsHR(val("hr"))+(conc==="A"?0:3)+newsTemp(val("temp"));newsScore.textContent="NEWS2 : "+s;newsStatus.innerHTML=scoreBadge(s>=7?"Score ≥7 : évaluation urgente selon le référentiel NEWS2.":s>=5?"Score 5–6 : évaluation clinique urgente selon le référentiel NEWS2.":"Score <5 : interpréter avec l'ensemble de la situation clinique.",s>=7?"urgent":s>=5?"attention":"ok")}
+function calcQSOFA(){let s=+qrr.value + +qbp.value + +qms.value;qScore.textContent="qSOFA : "+s+"/3";qScore.style.background=s>=2?"var(--warn)":"var(--soft)"}
+function calcMorse(){let ids=["fall","diag","aid","iv","gait","mental"];let s=ids.reduce((a,id)=>a+ +document.getElementById(id).value,0);mScore.textContent="Morse : "+s+"/125"}
+function openInfo(n){let texts={
+"DOLOPLUS-2":"Échelle d’hétéro-évaluation de la douleur chronique chez la personne âgée présentant des troubles de communication. Utiliser la grille validée de ton établissement.",
+"DN4":"Outil de dépistage d'une composante neuropathique. Utiliser la version validée et la conduite à tenir locale.",
+"DAN":"Échelle d’évaluation de la douleur aiguë du nouveau-né ; la HAS la cite parmi les échelles adaptées à cette population.",
+"EVENDOL":"Échelle comportementale pédiatrique ; vérifier l’âge, la version et le protocole utilisés dans le service.",
+"FPS-R":"Échelle de visages pour l’auto-évaluation de la douleur de l’enfant ; la HAS la décrit de 0 à 10.",
+"NIHSS":"Échelle neurologique structurée utilisée notamment dans l’évaluation d’un déficit lié à un AVC. Utiliser la formation et la version validée de ton établissement.",
+"CAM / CAM-ICU":"Outil de dépistage du delirium. Le diagnostic et la prise en charge reposent sur l’évaluation clinique complète.",
+"SOFA":"Score de défaillance d’organes nécessitant plusieurs paramètres biologiques et cliniques. Utiliser la version validée dans ton contexte.",
+"BRADEN":"Échelle de risque d’escarre à 6 domaines. Le score total va de 6 à 23 ; un score plus bas correspond à un risque plus élevé. Utiliser la grille validée/licenciée et le protocole de ton établissement.",
+"NORTON":"Échelle de risque d’escarre à 5 dimensions ; le score est interprété avec l’évaluation clinique et le protocole local.",
+"DOWNTON":"Échelle de risque de chute ; vérifier la version utilisée dans ton établissement avant cotation.",
+"MNA-SF":"Dépistage de la dénutrition chez la personne âgée. Utiliser la version validée et les modalités d’interprétation associées.",
+"NRS-2002":"Dépistage du risque nutritionnel chez l’adulte hospitalisé ; utiliser la version validée et le protocole local.",
+"MUST":"Outil de dépistage de la dénutrition ; utiliser la version officielle et les recommandations de prise en charge associées.",
+"ADL / KATZ":"Évaluation des activités de la vie quotidienne et de l’autonomie.",
+"IADL":"Évaluation des activités instrumentales de la vie quotidienne.",
+"CUSHMAN":"Échelle de repérage du sevrage alcoolique ; utiliser la grille et les prescriptions/protocoles du service.",
+"CIWA-Ar":"Échelle de surveillance du sevrage alcoolique ; utiliser la version validée et le protocole local."
+};page(n,"Fiche de rappel",`<div class="panel"><p>${texts[n]||"Échelle référencée dans Scores IDE V5."}</p></div><div class="notice">⚠️ Cette fiche ne remplace pas la grille officielle, la formation à son utilisation ni le protocole de ton établissement.</div><p class="note">Conseil : pour une cotation traçable, reporte toujours le score et les éléments qui ont conduit à la cotation dans le dossier selon les règles de ton établissement.</p>`)}
+function showAbout(){page("À propos","Scores IDE V5",`<div class="panel"><b>Ce que fait l'appli</b><p class="note">Calcul local, recherche instantanée, favoris et fonctionnement hors connexion après mise en cache.</p></div><div class="panel"><b>Sources de référence consultées</b><ul class="note"><li>HAS — échelles d'évaluation de la douleur.</li><li>Glasgow Coma Scale — approche structurée officielle.</li><li>Royal College of Physicians — NEWS2.</li><li>AHRQ — principes d'utilisation des échelles de risque d'escarre.</li><li>NHS — procédure RASS.</li></ul></div><div class="notice">Aucune donnée patient n'est enregistrée par cette application. Les favoris sont stockés uniquement dans le navigateur de l'appareil.</div>`)}
+const search=document.getElementById("search");search.addEventListener("input",e=>home(e.target.value));
+document.getElementById("dark").onclick=()=>{document.body.classList.toggle("dark");localStorage.setItem("ide_dark",document.body.classList.contains("dark")?"1":"0")};
+if(localStorage.getItem("ide_dark")==="1")document.body.classList.add("dark");
 home();
-</script><script>if("serviceWorker" in navigator){navigator.serviceWorker.register("./sw.js")}</script></body></html>
+if("serviceWorker" in navigator){navigator.serviceWorker.register("./sw.js").catch(()=>{})}
+</script>
+</body>
+</html>

@@ -1,1 +1,14 @@
-{"name": "Scores IDE", "short_name": "Scores IDE", "start_url": "./", "display": "standalone", "background_color": "#f3f7f6", "theme_color": "#0b6b68", "description": "Boîte à outils mobile pour scores et échelles cliniques.", "icons": [{"src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable"}, {"src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"}]}
+{
+  "name": "Scores IDE",
+  "short_name": "Scores IDE",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f3f8f7",
+  "theme_color": "#087c76",
+  "description": "Scores IDE V5 — outil mobile d'aide au calcul et au rappel des échelles cliniques.",
+  "icons": [
+    {"src":"./icône-192.png","sizes":"192x192","type":"image/png","purpose":"any maskable"},
+    {"src":"./icône-512.png","sizes":"512x512","type":"image/png","purpose":"any maskable"}
+  ]
+}
